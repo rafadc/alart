@@ -28,6 +28,14 @@ fn multiply(a: Color, b: f32) -> Color {
     }
 }
 
+fn hadamard_product(a: Color, b: Color) -> Color {
+    Color {
+        r: a.r * b.r,
+        g: a.g * b.g,
+        b: a.b * b.b,
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use crate::colors::*;
@@ -83,5 +91,24 @@ mod tests {
         abs_diff_eq!(multiplication.r, 1.8);
         abs_diff_eq!(multiplication.g, 1.2);
         abs_diff_eq!(multiplication.b, 1.5);
-        }
+    }
+
+    #[test]
+    fn hadamard_product_of_two_colors() {
+        let product = hadamard_product(
+            Color {
+                r: 1.0,
+                g: 0.6,
+                b: 0.75,
+            },
+            Color {
+                r: 0.7,
+                g: 0.1,
+                b: 0.25,
+            },
+        );
+        abs_diff_eq!(product.r, 0.7);
+        abs_diff_eq!(product.g, 0.06);
+        abs_diff_eq!(product.b, 0.1875);
+    }
 }
