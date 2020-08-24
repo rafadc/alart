@@ -1,5 +1,5 @@
 #[derive(PartialEq, Clone, Debug)]
-struct Tuple {
+pub struct Tuple {
     x: f32,
     y: f32,
     z: f32,

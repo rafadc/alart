@@ -1,7 +1,8 @@
-struct Color {
-    r: f32,
-    g: f32,
-    b: f32,
+#[derive(PartialEq, Clone, Debug)]
+pub struct Color {
+    pub r: f32,
+    pub g: f32,
+    pub b: f32,
 }
 
 fn add(a: Color, b: Color) -> Color {
