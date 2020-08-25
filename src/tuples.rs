@@ -104,20 +104,20 @@ pub fn div(a: &Tuple, b: f32) -> Tuple {
     }
 }
 
-fn magnitude(a: &Tuple) -> f32 {
+pub fn magnitude(a: &Tuple) -> f32 {
     let component_squares = a.x.powf(2.0) + a.y.powf(2.0) + a.z.powf(2.0);
     component_squares.sqrt()
 }
 
-fn normalize(a: &Tuple) -> Tuple {
+pub fn normalize(a: &Tuple) -> Tuple {
     div(&a.clone(), magnitude(&a.clone()))
 }
 
-fn dot(a: Tuple, b: Tuple) -> f32 {
+pub fn dot(a: &Tuple, b: &Tuple) -> f32 {
     a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w
 }
 
-fn cross(a: Tuple, b: Tuple) -> Tuple {
+pub fn cross(a: &Tuple, b: &Tuple) -> Tuple {
     vector(
         a.y * b.z - a.z * b.y,
         a.z * b.x - a.x * b.z,
@@ -268,12 +268,12 @@ mod tests {
 
     #[test]
     fn dot_product_of_two_tuples() {
-        assert_abs_diff_eq!(dot(vector(1.0, 2.0, 3.0), vector(2.0, 3.0, 4.0)), 20.0);
+        assert_abs_diff_eq!(dot(&vector(1.0, 2.0, 3.0), &vector(2.0, 3.0, 4.0)), 20.0);
     }
 
     #[test]
     fn cross_product_of_two_vectors() {
-        let cross_vector = cross(vector(1.0, 2.0, 3.0), vector(2.0, 3.0, 4.0));
+        let cross_vector = cross(&vector(1.0, 2.0, 3.0), &vector(2.0, 3.0, 4.0));
         assert_abs_diff_eq!(cross_vector, vector(-1.0, 2.0, -1.0));
     }
 }
