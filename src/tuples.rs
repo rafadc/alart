@@ -236,7 +236,7 @@ mod tests {
 
     #[test]
     fn magnitude_of_a_unit_vector() {
-        abs_diff_eq!(magnitude(vector(1.0, 0.0, 0.0)), 1.0);
+        assert_abs_diff_eq!(magnitude(vector(1.0, 0.0, 0.0)), 1.0);
     }
 
     #[test]
@@ -246,19 +246,19 @@ mod tests {
 
     #[test]
     fn magnitude_of_a_normalized_vector_is_1() {
-        abs_diff_eq!(magnitude(normalize(vector(-1.0, -2.0, -3.0))), 1.0);
+        assert_abs_diff_eq!(magnitude(normalize(vector(-1.0, -2.0, -3.0))), 1.0);
     }
 
     #[test]
     fn dot_product_of_two_tuples() {
-        abs_diff_eq!(dot(vector(1.0, 2.0, 3.0), vector(2.0, 3.0, 4.0)), 20.0);
+        assert_abs_diff_eq!(dot(vector(1.0, 2.0, 3.0), vector(2.0, 3.0, 4.0)), 20.0);
     }
 
     #[test]
     fn cross_product_of_two_vectors() {
         let cross_vector = cross(vector(1.0, 2.0, 3.0), vector(2.0, 3.0, 4.0));
-        abs_diff_eq!(cross_vector.x(), -1.0);
-        abs_diff_eq!(cross_vector.y(), 2.0);
-        abs_diff_eq!(cross_vector.z(), -1.0);
+        assert_abs_diff_eq!(cross_vector.x(), -1.0);
+        assert_abs_diff_eq!(cross_vector.y(), 2.0);
+        assert_abs_diff_eq!(cross_vector.z(), -1.0);
     }
 }
