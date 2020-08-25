@@ -49,8 +49,6 @@ pub fn export_png(canvas: &Canvas, filename: &str) {
             let g = (255.0 * pixel.g) as u8;
             let b = (255.0 * pixel.b) as u8;
 
-            log::debug!("Pixel {} becomes {}", pixel.r, r);
-
             img.put_pixel(i, j, image::Rgb([r, g, b]));
         }
     }
