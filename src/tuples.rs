@@ -1,3 +1,5 @@
+use approx::AbsDiffEq;
+
 #[derive(PartialEq, Clone, Debug)]
 pub struct Tuple {
     x: f32,
@@ -24,6 +26,21 @@ impl Tuple {
     }
 }
 
+impl AbsDiffEq for Tuple {
+    type Epsilon = f32;
+
+    fn default_epsilon() -> Self::Epsilon {
+        f32::default_epsilon()
+    }
+
+    fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
+        f32::abs_diff_eq(&self.x, &other.x, epsilon)
+            && f32::abs_diff_eq(&self.y, &other.y, epsilon)
+            && f32::abs_diff_eq(&self.z, &other.z, epsilon)
+            && f32::abs_diff_eq(&self.w, &other.w, epsilon)
+    }
+}
+
 pub fn vector(x: f32, y: f32, z: f32) -> Tuple {
     Tuple {
         x: x,
@@ -42,7 +59,7 @@ pub fn point(x: f32, y: f32, z: f32) -> Tuple {
     }
 }
 
-pub fn add(a: Tuple, b: Tuple) -> Tuple {
+pub fn add(a: &Tuple, b: &Tuple) -> Tuple {
     Tuple {
         x: a.x + b.x,
         y: a.y + b.y,
@@ -51,7 +68,7 @@ pub fn add(a: Tuple, b: Tuple) -> Tuple {
     }
 }
 
-pub fn sub(a: Tuple, b: Tuple) -> Tuple {
+pub fn sub(a: &Tuple, b: &Tuple) -> Tuple {
     Tuple {
         x: a.x - b.x,
         y: a.y - b.y,
@@ -60,7 +77,7 @@ pub fn sub(a: Tuple, b: Tuple) -> Tuple {
     }
 }
 
-pub fn negate(a: Tuple) -> Tuple {
+pub fn negate(a: &Tuple) -> Tuple {
     Tuple {
         x: -a.x,
         y: -a.y,
@@ -69,7 +86,7 @@ pub fn negate(a: Tuple) -> Tuple {
     }
 }
 
-pub fn mul(a: Tuple, b: f32) -> Tuple {
+pub fn mul(a: &Tuple, b: f32) -> Tuple {
     Tuple {
         x: a.x * b,
         y: a.y * b,
@@ -78,7 +95,7 @@ pub fn mul(a: Tuple, b: f32) -> Tuple {
     }
 }
 
-pub fn div(a: Tuple, b: f32) -> Tuple {
+pub fn div(a: &Tuple, b: f32) -> Tuple {
     Tuple {
         x: a.x / b,
         y: a.y / b,
@@ -87,13 +104,13 @@ pub fn div(a: Tuple, b: f32) -> Tuple {
     }
 }
 
-fn magnitude(a: Tuple) -> f32 {
+fn magnitude(a: &Tuple) -> f32 {
     let component_squares = a.x.powf(2.0) + a.y.powf(2.0) + a.z.powf(2.0);
     component_squares.sqrt()
 }
 
-fn normalize(a: Tuple) -> Tuple {
-    div(a.clone(), magnitude(a.clone()))
+fn normalize(a: &Tuple) -> Tuple {
+    div(&a.clone(), magnitude(&a.clone()))
 }
 
 fn dot(a: Tuple, b: Tuple) -> f32 {
@@ -126,13 +143,13 @@ mod tests {
     fn adding_tuples() {
         assert_eq!(
             add(
-                Tuple {
+                &Tuple {
                     x: 1.0,
                     y: 2.0,
                     z: 3.0,
                     w: 1.0
                 },
-                Tuple {
+                &Tuple {
                     x: 4.0,
                     y: 5.0,
                     z: 0.0,
@@ -152,13 +169,13 @@ mod tests {
     fn substracting_tuples() {
         assert_eq!(
             sub(
-                Tuple {
+                &Tuple {
                     x: 1.0,
                     y: 2.0,
                     z: 3.0,
                     w: 1.0
                 },
-                Tuple {
+                &Tuple {
                     x: 4.0,
                     y: 5.0,
                     z: 0.0,
@@ -177,7 +194,7 @@ mod tests {
     #[test]
     fn negating_tuples() {
         assert_eq!(
-            negate(Tuple {
+            negate(&Tuple {
                 x: 1.0,
                 y: 2.0,
                 z: 3.0,
@@ -196,7 +213,7 @@ mod tests {
     fn multiplying_tuples_by_scalars() {
         assert_eq!(
             mul(
-                Tuple {
+                &Tuple {
                     x: 1.0,
                     y: 2.0,
                     z: 3.0,
@@ -217,7 +234,7 @@ mod tests {
     fn dividing_tuples_by_scalars() {
         assert_eq!(
             div(
-                Tuple {
+                &Tuple {
                     x: 2.0,
                     y: 4.0,
                     z: 6.0,
@@ -236,17 +253,17 @@ mod tests {
 
     #[test]
     fn magnitude_of_a_unit_vector() {
-        assert_abs_diff_eq!(magnitude(vector(1.0, 0.0, 0.0)), 1.0);
+        assert_abs_diff_eq!(magnitude(&vector(1.0, 0.0, 0.0)), 1.0);
     }
 
     #[test]
     fn magnitude_of_a_negative_vector() {
-        assert_eq!(magnitude(vector(-1.0, -2.0, -3.0)), 14.0_f32.sqrt());
+        assert_eq!(magnitude(&vector(-1.0, -2.0, -3.0)), 14.0_f32.sqrt());
     }
 
     #[test]
     fn magnitude_of_a_normalized_vector_is_1() {
-        assert_abs_diff_eq!(magnitude(normalize(vector(-1.0, -2.0, -3.0))), 1.0);
+        assert_abs_diff_eq!(magnitude(&normalize(&vector(-1.0, -2.0, -3.0))), 1.0);
     }
 
     #[test]
@@ -257,8 +274,6 @@ mod tests {
     #[test]
     fn cross_product_of_two_vectors() {
         let cross_vector = cross(vector(1.0, 2.0, 3.0), vector(2.0, 3.0, 4.0));
-        assert_abs_diff_eq!(cross_vector.x(), -1.0);
-        assert_abs_diff_eq!(cross_vector.y(), 2.0);
-        assert_abs_diff_eq!(cross_vector.z(), -1.0);
+        assert_abs_diff_eq!(cross_vector, vector(-1.0, 2.0, -1.0));
     }
 }
