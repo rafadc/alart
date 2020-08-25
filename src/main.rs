@@ -3,6 +3,10 @@ extern crate approx;
 extern crate pretty_env_logger;
 extern crate log;
 
+extern crate ndarray;
+extern crate ndarray_linalg;
+extern crate openblas_src;
+
 mod canvas;
 mod colors;
 mod transformations;
