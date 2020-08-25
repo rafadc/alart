@@ -52,6 +52,15 @@ fn rotate_z(r: f32) -> Array2<f32> {
     ]
 }
 
+fn shearing(xy: f32, xz: f32, yx: f32, yz: f32, zx: f32, zy: f32) -> Array2<f32> {
+    array![
+        [1.0, xy, xz, 0.0],
+        [yx, 1.0, yz, 0.0],
+        [zx, zy, 1.0, 0.0],
+        [0.0, 0.0, 0.0, 1.0]
+    ]
+}
+
 fn transform(transformation: Array2<f32>, point_to_transform: Tuple) -> Tuple {
     let point_vector = array![
         [point_to_transform.x()],
@@ -128,5 +137,25 @@ mod tests {
         assert_abs_diff_eq!(transformed_point.x(), -1.0);
         assert_abs_diff_eq!(transformed_point.y(), 0.0);
         assert_abs_diff_eq!(transformed_point.z(), 0.0);
+    }
+
+    #[test]
+    fn shearing_x_in_proportion_to_z() {
+        let shearing = shearing(0.0, 1.0, 0.0, 0.0, 0.0, 0.0);
+        let point = point(2.0, 3.0, 4.0);
+        let transformed_point = transform(shearing, point);
+        assert_abs_diff_eq!(transformed_point.x(), 6.0);
+        assert_abs_diff_eq!(transformed_point.y(), 3.0);
+        assert_abs_diff_eq!(transformed_point.z(), 4.0);
+    }
+
+    #[test]
+    fn shearing_y_in_proportion_to_x() {
+        let shearing = shearing(0.0, 0.0, 1.0, 0.0, 0.0, 0.0);
+        let point = point(2.0, 3.0, 4.0);
+        let transformed_point = transform(shearing, point);
+        assert_abs_diff_eq!(transformed_point.x(), 2.0);
+        assert_abs_diff_eq!(transformed_point.y(), 5.0);
+        assert_abs_diff_eq!(transformed_point.z(), 4.0);
     }
 }
