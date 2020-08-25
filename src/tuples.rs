@@ -6,7 +6,25 @@ pub struct Tuple {
     w: f32,
 }
 
-fn vector(x: f32, y: f32, z: f32) -> Tuple {
+impl Tuple {
+    pub fn x(self: &Self) -> f32 {
+        self.x
+    }
+
+    pub fn y(self: &Self) -> f32 {
+        self.y
+    }
+
+    pub fn z(self: &Self) -> f32 {
+        self.z
+    }
+
+    pub fn w(self: &Self) -> f32 {
+        self.w
+    }
+}
+
+pub fn vector(x: f32, y: f32, z: f32) -> Tuple {
     Tuple {
         x: x,
         y: y,
@@ -15,7 +33,7 @@ fn vector(x: f32, y: f32, z: f32) -> Tuple {
     }
 }
 
-fn point(x: f32, y: f32, z: f32) -> Tuple {
+pub fn point(x: f32, y: f32, z: f32) -> Tuple {
     Tuple {
         x: x,
         y: y,
@@ -24,7 +42,7 @@ fn point(x: f32, y: f32, z: f32) -> Tuple {
     }
 }
 
-fn add(a: Tuple, b: Tuple) -> Tuple {
+pub fn add(a: Tuple, b: Tuple) -> Tuple {
     Tuple {
         x: a.x + b.x,
         y: a.y + b.y,
@@ -33,7 +51,7 @@ fn add(a: Tuple, b: Tuple) -> Tuple {
     }
 }
 
-fn sub(a: Tuple, b: Tuple) -> Tuple {
+pub fn sub(a: Tuple, b: Tuple) -> Tuple {
     Tuple {
         x: a.x - b.x,
         y: a.y - b.y,
@@ -42,7 +60,7 @@ fn sub(a: Tuple, b: Tuple) -> Tuple {
     }
 }
 
-fn negate(a: Tuple) -> Tuple {
+pub fn negate(a: Tuple) -> Tuple {
     Tuple {
         x: -a.x,
         y: -a.y,
@@ -51,7 +69,7 @@ fn negate(a: Tuple) -> Tuple {
     }
 }
 
-fn mul(a: Tuple, b: f32) -> Tuple {
+pub fn mul(a: Tuple, b: f32) -> Tuple {
     Tuple {
         x: a.x * b,
         y: a.y * b,
@@ -60,7 +78,7 @@ fn mul(a: Tuple, b: f32) -> Tuple {
     }
 }
 
-fn div(a: Tuple, b: f32) -> Tuple {
+pub fn div(a: Tuple, b: f32) -> Tuple {
     Tuple {
         x: a.x / b,
         y: a.y / b,
@@ -239,8 +257,8 @@ mod tests {
     #[test]
     fn cross_product_of_two_vectors() {
         let cross_vector = cross(vector(1.0, 2.0, 3.0), vector(2.0, 3.0, 4.0));
-        abs_diff_eq!(cross_vector.x, -1.0);
-        abs_diff_eq!(cross_vector.y, 2.0);
-        abs_diff_eq!(cross_vector.z, -1.0);
+        abs_diff_eq!(cross_vector.x(), -1.0);
+        abs_diff_eq!(cross_vector.y(), 2.0);
+        abs_diff_eq!(cross_vector.z(), -1.0);
     }
 }

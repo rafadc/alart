@@ -5,6 +5,7 @@ extern crate log;
 
 mod canvas;
 mod colors;
+mod transformations;
 mod tuples;
 
 fn main() {
