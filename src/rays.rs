@@ -1,6 +1,6 @@
 use crate::tuples::*;
 
-struct Ray {
+pub struct Ray {
     origin: Tuple,
     direction: Tuple
 }
