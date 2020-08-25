@@ -1,10 +1,12 @@
 use crate::rays::Ray;
 use crate::tuples::*;
+use crate::intersections::Intersection;
 
+#[derive(PartialEq, Clone, Debug)]
 pub struct Sphere {}
 
 impl Sphere {
-    pub fn intersect(self: &Self, ray: &Ray) -> Vec<f32> {
+    pub fn intersect(self: &Self, ray: &Ray) -> Vec<Intersection> {
         let sphere_to_ray = sub(&ray.origin, &point(0.0, 0.0, 0.0));
         let a = dot(&ray.direction, &ray.direction);
         let b = dot(&ray.direction, &sphere_to_ray) * 2.0;
@@ -19,7 +21,16 @@ impl Sphere {
         let t1 = (-b - discriminant.sqrt()) / (2.0 * a);
         let t2 = (-b + discriminant.sqrt()) / (2.0 * a);
 
-        vec![t1, t2]
+        vec![
+            Intersection{
+                t: t1,
+                object: self.clone()
+            },
+            Intersection {
+                t: t2,
+                object: self.clone()
+            }
+        ]
     }
 }
 
@@ -36,8 +47,10 @@ mod tests {
         let sphere = Sphere {};
         let intersections = sphere.intersect(&ray);
         assert_eq!(intersections.len(), 2);
-        assert_eq!(intersections[0], 4.0);
-        assert_eq!(intersections[1], 6.0);
+        assert_eq!(intersections[0].t, 4.0);
+        assert_eq!(intersections[0].object, sphere);
+        assert_eq!(intersections[1].t, 6.0);
+        assert_eq!(intersections[1].object, sphere);
     }
 
     #[test]
@@ -49,8 +62,12 @@ mod tests {
         let sphere = Sphere {};
         let intersections = sphere.intersect(&ray);
         assert_eq!(intersections.len(), 2);
-        assert_eq!(intersections[0], 5.0);
-        assert_eq!(intersections[1], 5.0);
+
+        assert_eq!(intersections[0].t, 5.0);
+        assert_eq!(intersections[0].object, sphere);
+
+        assert_eq!(intersections[1].t, 5.0);
+        assert_eq!(intersections[1].object, sphere);
     }
 
     #[test]
@@ -73,8 +90,12 @@ mod tests {
         let sphere = Sphere {};
         let intersections = sphere.intersect(&ray);
         assert_eq!(intersections.len(), 2);
-        assert_eq!(intersections[0], -1.0);
-        assert_eq!(intersections[1], 1.0);
+
+        assert_eq!(intersections[0].t, -1.0);
+        assert_eq!(intersections[0].object, sphere);
+
+        assert_eq!(intersections[1].t, 1.0);
+        assert_eq!(intersections[1].object, sphere);
     }
 
     #[test]
@@ -86,7 +107,10 @@ mod tests {
         let sphere = Sphere {};
         let intersections = sphere.intersect(&ray);
         assert_eq!(intersections.len(), 2);
-        assert_eq!(intersections[0], -6.0);
-        assert_eq!(intersections[1], -4.0);
+        assert_eq!(intersections[0].t, -6.0);
+        assert_eq!(intersections[0].object, sphere);
+
+        assert_eq!(intersections[1].t, -4.0);
+        assert_eq!(intersections[1].object, sphere);
     }
 }

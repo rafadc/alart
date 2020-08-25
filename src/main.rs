@@ -9,6 +9,7 @@ extern crate openblas_src;
 
 mod canvas;
 mod colors;
+mod intersections;
 mod rays;
 mod spheres;
 mod transformations;
