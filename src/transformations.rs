@@ -7,7 +7,7 @@ use ndarray_linalg::solve::Inverse;
 
 use std::f32::consts::PI;
 
-fn translation(x: f32, y: f32, z: f32) -> Array2<f32> {
+pub fn translation(x: f32, y: f32, z: f32) -> Array2<f32> {
     array![
         [1.0, 0.0, 0.0, x],
         [0.0, 1.0, 0.0, y],
@@ -16,7 +16,7 @@ fn translation(x: f32, y: f32, z: f32) -> Array2<f32> {
     ]
 }
 
-fn scale(x: f32, y: f32, z: f32) -> Array2<f32> {
+pub fn scale(x: f32, y: f32, z: f32) -> Array2<f32> {
     array![
         [x, 0.0, 0.0, 0.0],
         [0.0, y, 0.0, 0.0],
@@ -25,7 +25,7 @@ fn scale(x: f32, y: f32, z: f32) -> Array2<f32> {
     ]
 }
 
-fn rotate_x(r: f32) -> Array2<f32> {
+pub fn rotate_x(r: f32) -> Array2<f32> {
     array![
         [1.0, 0.0, 0.0, 0.0],
         [0.0, r.cos(), -r.sin(), 0.0],
@@ -34,7 +34,7 @@ fn rotate_x(r: f32) -> Array2<f32> {
     ]
 }
 
-fn rotate_y(r: f32) -> Array2<f32> {
+pub fn rotate_y(r: f32) -> Array2<f32> {
     array![
         [r.cos(), 0.0, r.sin(), 0.0],
         [0.0, 1.0, 0.0, 0.0],
@@ -43,7 +43,7 @@ fn rotate_y(r: f32) -> Array2<f32> {
     ]
 }
 
-fn rotate_z(r: f32) -> Array2<f32> {
+pub fn rotate_z(r: f32) -> Array2<f32> {
     array![
         [r.cos(), -r.sin(), 0.0, 0.0],
         [r.sin(), r.cos(), 0.0, 0.0],
@@ -61,7 +61,7 @@ fn shearing(xy: f32, xz: f32, yx: f32, yz: f32, zx: f32, zy: f32) -> Array2<f32>
     ]
 }
 
-fn transform(transformation: Array2<f32>, point_to_transform: Tuple) -> Tuple {
+pub fn transform(transformation: Array2<f32>, point_to_transform: Tuple) -> Tuple {
     let point_vector = array![
         [point_to_transform.x()],
         [point_to_transform.y()],
@@ -136,6 +136,16 @@ mod tests {
         let transformed_point = transform(rotation, point);
         assert_abs_diff_eq!(transformed_point.x(), -1.0);
         assert_abs_diff_eq!(transformed_point.y(), 0.0);
+        assert_abs_diff_eq!(transformed_point.z(), 0.0);
+    }
+
+    #[test]
+    fn another_rotation_in_z_axis() {
+        let rotation = rotate_z(PI / 4.0);
+        let point = point(0.0, 1.0, 0.0);
+        let transformed_point = transform(rotation, point);
+        assert_abs_diff_eq!(transformed_point.x(), -0.707106781);
+        assert_abs_diff_eq!(transformed_point.y(), 0.707106781);
         assert_abs_diff_eq!(transformed_point.z(), 0.0);
     }
 
