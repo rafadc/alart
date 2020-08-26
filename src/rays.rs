@@ -51,4 +51,15 @@ mod tests {
         assert_abs_diff_eq!(transformed_ray.origin, point(4.0, 6.0, 8.0));
         assert_abs_diff_eq!(transformed_ray.direction, point(0.0, 1.0, 0.0));
     }
+
+    #[test]
+    fn scaling_a_ray() {
+        let ray = Ray {
+            origin: point(1.0, 2.0, 3.0),
+            direction: vector(0.0, 1.0, 0.0),
+        };
+        let transformed_ray = ray.transform(scale(2.0, 3.0, 4.0));
+        assert_abs_diff_eq!(transformed_ray.origin, point(2.0, 6.0, 12.0));
+        assert_abs_diff_eq!(transformed_ray.direction, point(0.0, 3.0, 0.0));
+    }
 }
