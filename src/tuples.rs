@@ -30,14 +30,14 @@ impl Tuple {
     }
 
     pub fn transform(self: &Self, transformation: Transformation) -> Tuple {
-        let point_vector = array![
-            [self.x()],
-            [self.y()],
-            [self.z()],
-            [self.w()]
-        ];
+        let point_vector = array![[self.x()], [self.y()], [self.z()], [self.w()]];
         let result = transformation.dot(&point_vector);
-        point(result[[0, 0]], result[[1, 0]], result[[2, 0]])
+        Tuple {
+            x: result[[0, 0]],
+            y: result[[1, 0]],
+            z: result[[2, 0]],
+            w: self.w,
+        }
     }
 }
 

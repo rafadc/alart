@@ -1,6 +1,7 @@
 use crate::transformations::*;
 use crate::tuples::*;
 
+#[derive(PartialEq, Clone, Debug)]
 pub struct Ray {
     pub origin: Tuple,
     pub direction: Tuple,
@@ -49,7 +50,7 @@ mod tests {
         };
         let transformed_ray = ray.transform(translation(3.0, 4.0, 5.0));
         assert_abs_diff_eq!(transformed_ray.origin, point(4.0, 6.0, 8.0));
-        assert_abs_diff_eq!(transformed_ray.direction, point(0.0, 1.0, 0.0));
+        assert_abs_diff_eq!(transformed_ray.direction, vector(0.0, 1.0, 0.0));
     }
 
     #[test]
@@ -60,6 +61,6 @@ mod tests {
         };
         let transformed_ray = ray.transform(scale(2.0, 3.0, 4.0));
         assert_abs_diff_eq!(transformed_ray.origin, point(2.0, 6.0, 12.0));
-        assert_abs_diff_eq!(transformed_ray.direction, point(0.0, 3.0, 0.0));
+        assert_abs_diff_eq!(transformed_ray.direction, vector(0.0, 3.0, 0.0));
     }
 }
