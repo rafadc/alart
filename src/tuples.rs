@@ -1,3 +1,7 @@
+use crate::transformations::Transformation;
+
+use ndarray::prelude::*;
+
 use approx::AbsDiffEq;
 
 #[derive(PartialEq, Clone, Debug)]
@@ -23,6 +27,17 @@ impl Tuple {
 
     pub fn w(self: &Self) -> f32 {
         self.w
+    }
+
+    pub fn transform(self: &Self, transformation: Transformation) -> Tuple {
+        let point_vector = array![
+            [self.x()],
+            [self.y()],
+            [self.z()],
+            [self.w()]
+        ];
+        let result = transformation.dot(&point_vector);
+        point(result[[0, 0]], result[[1, 0]], result[[2, 0]])
     }
 }
 
