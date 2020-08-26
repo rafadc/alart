@@ -21,11 +21,11 @@ mod tests {
         let intersections = vec![
             Intersection{
                 t: 1.0,
-                object: Sphere{}
+                object: Sphere::new()
             },
             Intersection{
                 t: 3.0,
-                object: Sphere{}
+                object: Sphere::new()
             }
         ];
         assert_eq!(
@@ -38,11 +38,11 @@ mod tests {
         let intersections = vec![
             Intersection{
                 t: 1.0,
-                object: Sphere{}
+                object: Sphere::new()
             },
             Intersection{
                 t: -1.0,
-                object: Sphere{}
+                object: Sphere::new()
             }
         ];
         assert_eq!(
@@ -55,11 +55,11 @@ mod tests {
         let intersections = vec![
             Intersection{
                 t: -4.0,
-                object: Sphere{}
+                object: Sphere::new()
             },
             Intersection{
                 t: -1.0,
-                object: Sphere{}
+                object: Sphere::new()
             }
         ];
         assert!(hit(intersections).is_none());

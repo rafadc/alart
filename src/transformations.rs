@@ -1,4 +1,4 @@
-use crate::tuples::{point, Tuple};
+use crate::tuples::point;
 
 use ndarray::prelude::*;
 use ndarray::Array2;
@@ -8,6 +8,15 @@ use ndarray_linalg::solve::Inverse;
 use std::f32::consts::PI;
 
 pub type Transformation = Array2<f32>;
+
+pub fn identity() -> Transformation {
+    array![
+        [1.0, 0.0, 0.0, 0.0],
+        [0.0, 1.0, 0.0, 0.0],
+        [0.0, 0.0, 1.0, 0.0],
+        [0.0, 0.0, 0.0, 1.0]
+    ]
+}
 
 pub fn translation(x: f32, y: f32, z: f32) -> Transformation {
     array![
@@ -66,6 +75,13 @@ fn shearing(xy: f32, xz: f32, yx: f32, yz: f32, zx: f32, zy: f32) -> Transformat
 #[cfg(test)]
 mod tests {
     use crate::transformations::*;
+
+    #[test]
+    fn identity_does_not_nodify_a_point() {
+        let point = point(-3.0, 4.0, 5.0);
+        let transformed_point = point.transform(identity());
+        assert_abs_diff_eq!(point, transformed_point);
+    }
 
     #[test]
     fn translating_a_point() {
