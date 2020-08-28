@@ -25,15 +25,15 @@ fn main() {
     pretty_env_logger::init();
 
     log::info!("Staring alart");
-    let mut canvas = canvas::build_canvas(100, 100);
+    let mut canvas = canvas::build_canvas(1000, 1000);
 
     let mut sphere = Sphere::new();
     sphere.transformation = transformations::translation(0.0, 0.0, 3.0);
-    for i in 0..100 {
-        for j in 0..100 {
+    for i in 0..1000 {
+        for j in 0..1000 {
             let ray = Ray {
                 origin: point(0.0, 0.0, 0.0),
-                direction: vector(-0.5 + (i as f32) * 0.01, -0.5 + (j as f32) * 0.01, 1.0),
+                direction: vector(-0.5 + (i as f32) * 0.001, -0.5 + (j as f32) * 0.001, 1.0),
             };
             if hit(sphere.intersect(&ray)).is_some() {
                 canvas::write_pixel(

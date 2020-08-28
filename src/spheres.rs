@@ -23,7 +23,11 @@ impl Sphere {
                 .inv()
                 .expect("Couldn't invert transformation to apply to ray"),
         );
-        log::debug!("Ray: {:?} and inverted: {:?}", ray.clone(), transformed_ray.clone());
+        log::debug!(
+            "Ray: {:?} and inverted: {:?}",
+            ray.clone(),
+            transformed_ray.clone()
+        );
         let sphere_to_ray = sub(&transformed_ray.origin, &point(0.0, 0.0, 0.0));
         let a = dot(&transformed_ray.direction, &transformed_ray.direction);
         let b = dot(&transformed_ray.direction, &sphere_to_ray) * 2.0;
@@ -48,6 +52,16 @@ impl Sphere {
                 object: self.clone(),
             },
         ]
+    }
+
+    pub fn normal_at(self: &Self, world_point: Tuple) -> Tuple {
+        let transformation = self.transformation.inv().expect("Could not invert sphere transform");
+        let object_point = world_point.transform(transformation);
+        let object_normal = sub(&object_point, &point(0.0, 0.0, 0.0));
+        let world_transformation = self.transformation.inv().expect("Could not invert sphere transform").t().to_owned();
+        let mut world_normal = object_normal.transform(world_transformation);
+        world_normal.w = 0.0;
+        world_normal
     }
 }
 
@@ -149,5 +163,59 @@ mod tests {
         assert_eq!(intersections.len(), 2);
         assert_eq!(intersections[0].t, 3.0);
         assert_eq!(intersections[1].t, 7.0);
+    }
+
+    #[test]
+    fn normal_at_x_axis() {
+        let sphere = Sphere::new();
+        assert_abs_diff_eq!(
+            sphere.normal_at(point(1.0, 0.0, 0.0)),
+            vector(1.0, 0.0, 0.0)
+        )
+    }
+
+    #[test]
+    fn normal_at_y_axis() {
+        let sphere = Sphere::new();
+        assert_abs_diff_eq!(
+            sphere.normal_at(point(0.0, 1.0, 0.0)),
+            vector(0.0, 1.0, 0.0)
+        )
+    }
+
+    #[test]
+    fn normal_at_z_axis() {
+        let sphere = Sphere::new();
+        assert_abs_diff_eq!(
+            sphere.normal_at(point(0.0, 0.0, 1.0)),
+            vector(0.0, 0.0, 1.0)
+        )
+    }
+
+    #[test]
+    fn normal_at_non_axial_point() {
+        let sphere = Sphere::new();
+        assert_abs_diff_eq!(
+            sphere.normal_at(point(
+                3.0_f32.sqrt() / 3.0,
+                3.0_f32.sqrt() / 3.0,
+                3.0_f32.sqrt() / 3.0
+            )),
+            vector(
+                3.0_f32.sqrt() / 3.0,
+                3.0_f32.sqrt() / 3.0,
+                3.0_f32.sqrt() / 3.0
+            )
+        )
+    }
+
+    #[test]
+    fn normal_at_a_translated_sphere() {
+        let mut sphere = Sphere::new();
+        sphere.transformation = translation(0.0, 1.0, 0.0);
+        assert_abs_diff_eq!(
+            sphere.normal_at(point(0.0, 1.70711, -0.70711)),
+            vector(0.0, 0.70711, -0.70711)
+        )
     }
 }

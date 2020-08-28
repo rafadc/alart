@@ -9,7 +9,7 @@ pub struct Tuple {
     x: f32,
     y: f32,
     z: f32,
-    w: f32,
+    pub w: f32,
 }
 
 impl Tuple {
