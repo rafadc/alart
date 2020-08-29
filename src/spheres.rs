@@ -2,18 +2,21 @@ use crate::intersections::Intersection;
 use crate::rays::Ray;
 use crate::transformations::*;
 use crate::tuples::*;
+use crate::materials::Material;
 
 use ndarray_linalg::solve::Inverse;
 
 #[derive(PartialEq, Clone, Debug)]
 pub struct Sphere {
     pub transformation: Transformation,
+    pub material: Material
 }
 
 impl Sphere {
     pub fn new() -> Sphere {
         Sphere {
             transformation: identity(),
+            material: Material::new()
         }
     }
 
