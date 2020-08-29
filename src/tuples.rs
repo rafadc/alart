@@ -140,6 +140,11 @@ pub fn cross(a: &Tuple, b: &Tuple) -> Tuple {
     )
 }
 
+pub fn reflect(v: &Tuple, n: &Tuple) -> Tuple {
+    let a = dot(&v, &n);
+    sub(v, &mul(&mul(n, a), 2.0))
+}
+
 #[cfg(test)]
 mod tests {
     use crate::tuples::*;
@@ -290,5 +295,19 @@ mod tests {
     fn cross_product_of_two_vectors() {
         let cross_vector = cross(&vector(1.0, 2.0, 3.0), &vector(2.0, 3.0, 4.0));
         assert_abs_diff_eq!(cross_vector, vector(-1.0, 2.0, -1.0));
+    }
+
+    #[test]
+    fn reflecting_a_vector() {
+        let vector_to_reflect = vector(1.0, -1.0, 0.0);
+        let normal = vector(0.0, 1.0, 0.0);
+        assert_abs_diff_eq!(reflect(&vector_to_reflect, &normal), vector(1.0, 1.0, 0.0));
+    }
+
+    #[test]
+    fn reflecting_on_a_slanted_surface() {
+        let vector_to_reflect = vector(0.0, -1.0, 0.0);
+        let normal = vector(2.0_f32.sqrt() / 2.0, 2.0_f32.sqrt() / 2.0, 0.0);
+        assert_abs_diff_eq!(reflect(&vector_to_reflect, &normal), vector(1.0, 0.0, 0.0));
     }
 }
