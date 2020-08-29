@@ -1,8 +1,24 @@
+use approx::AbsDiffEq;
+
 #[derive(PartialEq, Clone, Debug)]
 pub struct Color {
     pub r: f32,
     pub g: f32,
     pub b: f32,
+}
+
+impl AbsDiffEq for Color {
+    type Epsilon = f32;
+
+    fn default_epsilon() -> Self::Epsilon {
+        f32::default_epsilon()
+    }
+
+    fn abs_diff_eq(&self, other: &Self, epsilon: Self::Epsilon) -> bool {
+        f32::abs_diff_eq(&self.r, &other.r, epsilon)
+            && f32::abs_diff_eq(&self.g, &other.g, epsilon)
+            && f32::abs_diff_eq(&self.b, &other.b, epsilon)
+    }
 }
 
 fn add(a: Color, b: Color) -> Color {
