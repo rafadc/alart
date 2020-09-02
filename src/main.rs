@@ -22,6 +22,8 @@ use crate::intersections::hit;
 use crate::rays::Ray;
 use crate::spheres::Sphere;
 use crate::tuples::*;
+use crate::materials::*;
+use crate::lights::Light;
 
 fn main() {
     pretty_env_logger::init();
@@ -31,12 +33,21 @@ fn main() {
 
     let mut sphere = Sphere::new();
     sphere.transformation = transformations::translation(0.0, 0.0, 3.0);
+    sphere.material = Material::new();
+    sphere.material.color = Color::new(1.0, 0.2, 1.0);
+
+    let light = Light {
+        position: point(-10.0, 10.0, -10.0),
+        intensity: Color::new(1.0, 1.0, 1.0)
+    };
+
     for i in 0..1000 {
         for j in 0..1000 {
             let ray = Ray {
                 origin: point(0.0, 0.0, 0.0),
-                direction: vector(-0.5 + (i as f32) * 0.001, -0.5 + (j as f32) * 0.001, 1.0),
+                direction: vector(-0.5 + (i as f32) * 0.001, -0.5 + (j as f32) * 0.001, 1.0).normalize(),
             };
+
             if hit(sphere.intersect(&ray)).is_some() {
                 canvas::write_pixel(
                     &mut canvas,

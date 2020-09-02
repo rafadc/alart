@@ -7,6 +7,16 @@ pub struct Color {
     pub b: f32,
 }
 
+impl Color {
+    pub fn new(r: f32, g: f32, b: f32) -> Color {
+        Color { r: r, g: g, b: b }
+    }
+
+    pub fn black() -> Color {
+        Color::new(0.0, 0.0, 0.0)
+    }
+}
+
 impl AbsDiffEq for Color {
     type Epsilon = f32;
 
@@ -21,7 +31,7 @@ impl AbsDiffEq for Color {
     }
 }
 
-fn add(a: Color, b: Color) -> Color {
+pub fn add(a: Color, b: Color) -> Color {
     Color {
         r: a.r + b.r,
         g: a.g + b.g,
@@ -29,7 +39,7 @@ fn add(a: Color, b: Color) -> Color {
     }
 }
 
-fn sub(a: Color, b: Color) -> Color {
+pub fn sub(a: Color, b: Color) -> Color {
     Color {
         r: a.r - b.r,
         g: a.g - b.g,
@@ -37,7 +47,7 @@ fn sub(a: Color, b: Color) -> Color {
     }
 }
 
-fn multiply(a: Color, b: f32) -> Color {
+pub fn multiply(a: &Color, b: f32) -> Color {
     Color {
         r: a.r * b,
         g: a.g * b,
@@ -45,7 +55,7 @@ fn multiply(a: Color, b: f32) -> Color {
     }
 }
 
-fn hadamard_product(a: Color, b: Color) -> Color {
+pub fn hadamard_product(a: &Color, b: &Color) -> Color {
     Color {
         r: a.r * b.r,
         g: a.g * b.g,
@@ -98,7 +108,7 @@ mod tests {
     #[test]
     fn multiply_a_color_by_a_scalar() {
         let multiplication = multiply(
-            Color {
+            &Color {
                 r: 0.9,
                 g: 0.6,
                 b: 0.75,
@@ -113,12 +123,12 @@ mod tests {
     #[test]
     fn hadamard_product_of_two_colors() {
         let product = hadamard_product(
-            Color {
+            &Color {
                 r: 1.0,
                 g: 0.6,
                 b: 0.75,
             },
-            Color {
+            &Color {
                 r: 0.7,
                 g: 0.1,
                 b: 0.25,

@@ -39,6 +39,10 @@ impl Tuple {
             w: self.w,
         }
     }
+
+    pub fn normalize(self: &Self) -> Tuple {
+        div(&self, magnitude(&self))
+    }
 }
 
 impl AbsDiffEq for Tuple {
@@ -122,10 +126,6 @@ pub fn div(a: &Tuple, b: f32) -> Tuple {
 pub fn magnitude(a: &Tuple) -> f32 {
     let component_squares = a.x.powf(2.0) + a.y.powf(2.0) + a.z.powf(2.0);
     component_squares.sqrt()
-}
-
-pub fn normalize(a: &Tuple) -> Tuple {
-    div(&a.clone(), magnitude(&a.clone()))
 }
 
 pub fn dot(a: &Tuple, b: &Tuple) -> f32 {
@@ -283,7 +283,7 @@ mod tests {
 
     #[test]
     fn magnitude_of_a_normalized_vector_is_1() {
-        assert_abs_diff_eq!(magnitude(&normalize(&vector(-1.0, -2.0, -3.0))), 1.0);
+        assert_abs_diff_eq!(magnitude(&vector(-1.0, -2.0, -3.0).normalize()), 1.0);
     }
 
     #[test]
