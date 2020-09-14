@@ -57,7 +57,7 @@ impl Sphere {
         ]
     }
 
-    pub fn normal_at(self: &Self, world_point: Tuple) -> Tuple {
+    pub fn normal_at(self: &Self, world_point: &Tuple) -> Tuple {
         let transformation = self.transformation.inv().expect("Could not invert sphere transform");
         let object_point = world_point.transform(transformation);
         let object_normal = sub(&object_point, &point(0.0, 0.0, 0.0));
@@ -172,7 +172,7 @@ mod tests {
     fn normal_at_x_axis() {
         let sphere = Sphere::new();
         assert_abs_diff_eq!(
-            sphere.normal_at(point(1.0, 0.0, 0.0)),
+            sphere.normal_at(&point(1.0, 0.0, 0.0)),
             vector(1.0, 0.0, 0.0)
         )
     }
@@ -181,7 +181,7 @@ mod tests {
     fn normal_at_y_axis() {
         let sphere = Sphere::new();
         assert_abs_diff_eq!(
-            sphere.normal_at(point(0.0, 1.0, 0.0)),
+            sphere.normal_at(&point(0.0, 1.0, 0.0)),
             vector(0.0, 1.0, 0.0)
         )
     }
@@ -190,7 +190,7 @@ mod tests {
     fn normal_at_z_axis() {
         let sphere = Sphere::new();
         assert_abs_diff_eq!(
-            sphere.normal_at(point(0.0, 0.0, 1.0)),
+            sphere.normal_at(&point(0.0, 0.0, 1.0)),
             vector(0.0, 0.0, 1.0)
         )
     }
@@ -199,7 +199,7 @@ mod tests {
     fn normal_at_non_axial_point() {
         let sphere = Sphere::new();
         assert_abs_diff_eq!(
-            sphere.normal_at(point(
+            sphere.normal_at(&point(
                 3.0_f32.sqrt() / 3.0,
                 3.0_f32.sqrt() / 3.0,
                 3.0_f32.sqrt() / 3.0
@@ -217,7 +217,7 @@ mod tests {
         let mut sphere = Sphere::new();
         sphere.transformation = translation(0.0, 1.0, 0.0);
         assert_abs_diff_eq!(
-            sphere.normal_at(point(0.0, 1.70711, -0.70711)),
+            sphere.normal_at(&point(0.0, 1.70711, -0.70711)),
             vector(0.0, 0.70711, -0.70711)
         )
     }

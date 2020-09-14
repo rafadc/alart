@@ -49,7 +49,7 @@ pub fn lighting(
     } else {
         diffuse_contribution = multiply(&multiply(&effective_color, material.diffuse), light_dot_normal);
 
-        let reflect_vector = reflect(&negate(&direction_to_light_source), normal_vector);
+        let reflect_vector = reflect(&direction_to_light_source.negate(), normal_vector);
         let reflect_dot_eye = dot(&reflect_vector, eye_vector);
 
         if reflect_dot_eye < 0.0 {

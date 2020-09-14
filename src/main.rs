@@ -19,11 +19,11 @@ mod tuples;
 
 use crate::colors::Color;
 use crate::intersections::hit;
+use crate::lights::Light;
+use crate::materials::*;
 use crate::rays::Ray;
 use crate::spheres::Sphere;
 use crate::tuples::*;
-use crate::materials::*;
-use crate::lights::Light;
 
 fn main() {
     pretty_env_logger::init();
@@ -38,27 +38,35 @@ fn main() {
 
     let light = Light {
         position: point(-10.0, 10.0, -10.0),
-        intensity: Color::new(1.0, 1.0, 1.0)
+        intensity: Color::new(1.0, 1.0, 1.0),
     };
 
     for i in 0..1000 {
         for j in 0..1000 {
             let ray = Ray {
                 origin: point(0.0, 0.0, 0.0),
-                direction: vector(-0.5 + (i as f32) * 0.001, -0.5 + (j as f32) * 0.001, 1.0).normalize(),
+                direction: vector(-0.5 + (i as f32) * 0.001, 0.5 - (j as f32) * 0.001, 1.0)
+                    .normalize(),
             };
 
-            if hit(sphere.intersect(&ray)).is_some() {
-                canvas::write_pixel(
-                    &mut canvas,
-                    i,
-                    j,
-                    Color {
-                        r: 1.0,
-                        g: 0.0,
-                        b: 0.0,
-                    },
+            let maybe_hit_with_sphere = hit(sphere.intersect(&ray));
+
+            if maybe_hit_with_sphere.is_some() {
+                let hit_with_sphere = maybe_hit_with_sphere.unwrap();
+                let point = ray.position(hit_with_sphere.t);
+                let normal_of_hit = hit_with_sphere.object.normal_at(&point);
+
+                let eye = ray.direction.negate();
+
+                let color = lighting(
+                    hit_with_sphere.object.material,
+                    light.clone(),
+                    &point,
+                    &eye,
+                    &normal_of_hit,
                 );
+
+                canvas::write_pixel(&mut canvas, i, j, color);
             }
         }
     }

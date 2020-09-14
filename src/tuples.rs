@@ -13,6 +13,10 @@ pub struct Tuple {
 }
 
 impl Tuple {
+    pub fn new(x: f32, y: f32, z: f32, w: f32) -> Tuple {
+        Tuple { x: x, y: y, z: z, w: w }
+    }
+
     pub fn x(self: &Self) -> f32 {
         self.x
     }
@@ -42,6 +46,10 @@ impl Tuple {
 
     pub fn normalize(self: &Self) -> Tuple {
         div(&self, magnitude(&self))
+    }
+
+    pub fn negate(self: &Self) -> Tuple {
+        Tuple::new(-self.x, -self.y, -self.z, -self.w)
     }
 }
 
@@ -93,15 +101,6 @@ pub fn sub(a: &Tuple, b: &Tuple) -> Tuple {
         y: a.y - b.y,
         z: a.z - b.z,
         w: a.w - b.w,
-    }
-}
-
-pub fn negate(a: &Tuple) -> Tuple {
-    Tuple {
-        x: -a.x,
-        y: -a.y,
-        z: -a.z,
-        w: -a.w,
     }
 }
 
@@ -214,12 +213,12 @@ mod tests {
     #[test]
     fn negating_tuples() {
         assert_eq!(
-            negate(&Tuple {
+            Tuple {
                 x: 1.0,
                 y: 2.0,
                 z: 3.0,
                 w: 1.0
-            }),
+            }.negate(),
             Tuple {
                 x: -1.0,
                 y: -2.0,
